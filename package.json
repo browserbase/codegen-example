@@ -2,6 +2,10 @@
   "name": "codegen-example",
   "version": "0.1.0",
   "private": true,
+  "author": {
+    "email": "jason@nosaj.io",
+    "name": "Jason Howmans"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
