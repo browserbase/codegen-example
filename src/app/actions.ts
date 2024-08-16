@@ -6,11 +6,19 @@ import playwright from "playwright";
 // Automatically sets apiKey using process.env.ANTHROPIC_API_KEY
 const anthropic = new Anthropic();
 
-export async function getBrowserbasePage(cdpUrl: string) {
+const browserbaseApiKey = process.env.BROWSERBASE_API_KEY;
+if (!browserbaseApiKey) {
+  throw new Error("BROWSERBASE_API_KEY is required");
+}
+
+export async function getBrowserbasePage(targetUrl: string) {
   try {
-    const browser = await playwright.chromium.connectOverCDP(cdpUrl);
+    const browser = await playwright.chromium.connectOverCDP(
+      `wss://connect.browserbase.com?apiKey=${browserbaseApiKey}`,
+    );
     const defaultContext = browser.contexts()[0];
     const page = defaultContext.pages()[0];
+    await page.goto(targetUrl);
     let pageHTML = "";
     pageHTML = await page.evaluate(() => {
       return document.documentElement.outerHTML;

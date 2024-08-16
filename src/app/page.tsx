@@ -13,7 +13,7 @@ export default function Codegen() {
   const { toast } = useToast();
   const [prompt, setPrompt] = useState("");
   const [script, setScript] = useState("");
-  const [bbConnectUrl, setBBConnectUrl] = useState("");
+  const [websiteUrl, setWebsiteUrl] = useState("");
   const [state, setState] = useState<"ready" | "connecting" | "generating">(
     "ready",
   );
@@ -24,7 +24,7 @@ export default function Codegen() {
   };
 
   const handleExecute = async () => {
-    if (!bbConnectUrl) {
+    if (!websiteUrl) {
       toast({
         title: "Empty Browserbase URL",
         description: "Please enter a Browserbase URL",
@@ -40,12 +40,12 @@ export default function Codegen() {
     }
     try {
       setState("connecting");
-      const page = await getBrowserbasePage(bbConnectUrl);
+      const page = await getBrowserbasePage(websiteUrl);
       if (!page) {
         toast({
           title: "Failed to connect to Browserbase page",
           description:
-            "Check your connection string looks like this: wss://connect.browserbase.com/debug/{sessionId}/devtools/browser/{pageId}",
+            'Ensure you have added your "BROWSERBASE_API_KEY" to the .env file',
         });
         return;
       }
@@ -137,12 +137,12 @@ export default function Codegen() {
             <div className="hidden flex-col space-y-4 sm:flex md:order-1">
               <div className="grid gap-2">
                 <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                  Browserbase page debug URL
+                  Target website
                 </span>
                 <Input
-                  placeholder="wss://connect.browserbase.com/debug/..."
-                  onChange={(e) => setBBConnectUrl(e.target.value)}
-                  value={bbConnectUrl}
+                  placeholder="https://"
+                  onChange={(e) => setWebsiteUrl(e.target.value)}
+                  value={websiteUrl}
                   disabled={state !== "ready"}
                 />
               </div>
